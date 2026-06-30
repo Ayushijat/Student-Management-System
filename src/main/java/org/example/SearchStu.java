@@ -1,28 +1,33 @@
 package org.example;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Scanner;
 
-public class ReadStu {
-    public static void readStudent() throws Exception {
+public class SearchStu {
+    public static void searchStu() throws Exception {
+        Connection con = DBConnection.getConnection();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Id");
+        int id = sc.nextInt();
 
-       Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement("Select * from Student");
+        String query = "Select * from student where id=?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1,id);
         ResultSet rs = ps.executeQuery();
-        while(rs.next()){
+
+        if(rs.next()){
             System.out.println("Id :        "+rs.getString("id"));
             System.out.println("Name :      "+rs.getString("name"));
             System.out.println("Roll no :   "+rs.getString("rollno"));
             System.out.println("Email :     "+rs.getString("email"));
             System.out.println("Phone no :  "+rs.getString("phoneno"));
             System.out.println("Gender  :   "+rs.getString("gender"));
-            System.out.println();
-        }
-        rs.close();
-        ps.close();
-        con.close();
 
+        }else{
+            System.out.println("Student Not Found!.....");
+        }
+        con.close();
     }
 }

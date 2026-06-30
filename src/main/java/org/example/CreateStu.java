@@ -3,30 +3,54 @@ package org.example;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 public class CreateStu {
-    public static void main(String[] args) throws Exception {
-        int id = 5;
-        String name = "Divyanshi Jat";
-        int rollno = 10245;
-        String email = "diya@gmail.com";
-        int phoneno = 23906585;
-        String gender = "female";
+    public static void createStudent() throws Exception {
+        int id;
+        String name;
+        int rollno;
+        String email;
+        int phoneno;
+        String gender;
+        Scanner sc = new Scanner(System.in);
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/School","root","aayushi123");
+        Connection con = DBConnection.getConnection();
+
+        System.out.println("Enter id : ");
+        id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter your name : ");
+        name = sc.nextLine();
+
+        System.out.println("Enter Roll No : ");
+        rollno = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter your Email : ");
+        email=sc.nextLine();
+
+        System.out.println("Phone No : ");
+        phoneno = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Gender  : ");
+        gender= sc.nextLine();
 
         PreparedStatement ps = con.prepareStatement("insert into Student values(?,?,?,?,?,?)");
-        ps.setString(1, String.valueOf(id));
+        ps.setInt(1, id);
         ps.setString(2,name);
-        ps.setString(3, String.valueOf(rollno));
+        ps.setInt(3,rollno);
         ps.setString(4,email);
-        ps.setString(5, String.valueOf(phoneno));
+        ps.setInt(5, phoneno);
         ps.setString(6,gender);
 
         int i=ps.executeUpdate();
         if(i>0){
-            System.out.println("Success");
+            System.out.println("Student Added Successfully!...");
+
+            FileHandler.writeLog("Student Added: Id = "+id+" , Name = "+name);
         }else{
             System.out.println("fail");
         }
